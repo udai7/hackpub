@@ -156,12 +156,12 @@ export default function Dashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">My Hackathons</h1>
-          <Link
-            href="/dashboard/create"
+          <button
+            onClick={() => setIsCreating(true)}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
           >
             Create New Hackathon
-          </Link>
+          </button>
         </div>
 
         {isCreating && (
