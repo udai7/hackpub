@@ -1,51 +1,45 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useAuth, useUser } from '@clerk/nextjs';
 import { useState } from 'react';
 import { UserRole } from '@/types';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuth } from '@/context/AuthContext';
+import { setCurrentUser } from '@/utils/localStorage';
 
 export default function RoleSelectionPage() {
   const router = useRouter();
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!isLoaded) {
-    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
-  }
-
-  if (!isSignedIn) {
-    router.push('/sign-in');
+  if (!isAuthenticated) {
+    router.push('/');
     return null;
   }
 
   const handleRoleSelection = async (role: UserRole) => {
     setIsSubmitting(true);
     try {
-      // Store role in localStorage for now
-      // In a real application, you would store this in your database
-      localStorage.setItem(`user_${user.id}_role`, role);
-      
-      // Set public metadata for the user with their role
-      await user.update({
-        publicMetadata: {
+      // Update user with selected role
+      if (user) {
+        const updatedUser = {
+          ...user,
           role: role
-        }
-      });
-
-      toast.success(`You are now registered as a ${role}!`);
-      
-      // Redirect based on role
-      setTimeout(() => {
-        if (role === 'host') {
-          router.push('/dashboard');
-        } else {
-          router.push('/hackathons');
-        }
-      }, 1500);
+        };
+        setCurrentUser(updatedUser);
+        
+        toast.success(`You are now registered as a ${role}!`);
+        
+        // Redirect based on role
+        setTimeout(() => {
+          if (role === 'host') {
+            router.push('/dashboard');
+          } else {
+            router.push('/hackathons');
+          }
+        }, 1500);
+      }
     } catch (error) {
       console.error('Error setting user role:', error);
       toast.error('Failed to set role. Please try again.');
@@ -60,7 +54,7 @@ export default function RoleSelectionPage() {
         <h1 className="text-3xl font-bold text-center text-indigo-600 mb-8">Welcome to HackPub!</h1>
         
         <p className="text-gray-700 text-center mb-6">
-          Thanks for signing up, {user?.firstName || 'User'}! Please select your role:
+          Thanks for signing up, {user?.name || 'User'}! Please select your role:
         </p>
         
         <div className="space-y-4">
@@ -89,10 +83,10 @@ export default function RoleSelectionPage() {
         
         <div className="mt-8 text-center">
           <button
-            onClick={() => signOut(() => router.push('/'))}
+            onClick={() => router.push('/')}
             className="text-gray-500 hover:text-gray-700 text-sm"
           >
-            Sign out and choose different account
+            Back to home
           </button>
         </div>
       </div>

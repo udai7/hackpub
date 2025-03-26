@@ -11,7 +11,12 @@ import { Hackathon } from '@/types';
 import { toast } from 'react-toastify';
 import Link from 'next/link';
 
-export default function HackathonDetailPage({ params }: { params: { id: string } }) {
+type PageProps = {
+  params: Promise<{ id: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export default function HackathonDetailPage({ params }: PageProps) {
   const router = useRouter();
   const { user, isAuthenticated } = useAuth();
   const [hackathon, setHackathon] = useState<Hackathon | null>(null);
@@ -19,15 +24,20 @@ export default function HackathonDetailPage({ params }: { params: { id: string }
   const [hasParticipated, setHasParticipated] = useState(false);
 
   useEffect(() => {
-    const fetchHackathon = () => {
-      const id = params?.id || '';
-      const foundHackathon = getHackathonById(id);
-      
-      if (foundHackathon) {
-        setHackathon(foundHackathon);
+    const fetchHackathon = async () => {
+      try {
+        const resolvedParams = await params;
+        const id = resolvedParams?.id || '';
+        const foundHackathon = getHackathonById(id);
+        
+        if (foundHackathon) {
+          setHackathon(foundHackathon);
+        }
+      } catch (error) {
+        console.error('Error fetching hackathon:', error);
+      } finally {
+        setLoading(false);
       }
-      
-      setLoading(false);
     };
 
     fetchHackathon();
@@ -89,7 +99,7 @@ export default function HackathonDetailPage({ params }: { params: { id: string }
       <div className="min-h-screen bg-gray-50">
         <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center">
           <h1 className="text-2xl font-bold text-gray-900">Hackathon not found</h1>
-          <p className="mt-2 text-gray-600">The hackathon you're looking for doesn't exist.</p>
+          <p className="mt-2 text-gray-600">The hackathon you&apos;re looking for doesn&apos;t exist.</p>
           <Link
             href="/hackathons"
             className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
@@ -131,7 +141,7 @@ export default function HackathonDetailPage({ params }: { params: { id: string }
             </p>
           </div>
           
-          <div className="px-4 py-5 sm:px-6">
+          <div className="px-4 py-5 sm:p-6">
             <div className="prose max-w-none">
               <p className="text-gray-700">{hackathon.description}</p>
             </div>

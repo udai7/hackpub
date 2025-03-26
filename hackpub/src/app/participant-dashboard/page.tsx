@@ -108,7 +108,7 @@ export default function ParticipantDashboard() {
 
         {hackathons.length === 0 && (
           <div className="text-center mt-12">
-            <p className="text-gray-500 text-lg">You haven't participated in any hackathons yet.</p>
+            <p className="text-gray-500 text-lg">You haven&apos;t participated in any hackathons yet.</p>
             <Link
               href="/hackathons"
               className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"

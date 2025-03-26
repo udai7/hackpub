@@ -13,7 +13,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string) => Promise<void>;
   signUp: (email: string, password: string, name: string, role: "host" | "participant") => Promise<void>;
   signOut: () => void;
 }
@@ -33,7 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoaded(true);
   }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = async (email: string) => {
     try {
       // In a real app, you would validate credentials against a backend
       const storedUser = localStorage.getItem("user");

@@ -116,7 +116,7 @@ export const removeUserParticipation = (userId: string, hackathonId: string): vo
   const allParticipations = participationsJSON ? JSON.parse(participationsJSON) : {};
   const userParticipations = allParticipations[userId] || [];
   
-  const updatedParticipations = userParticipations.filter(id => id !== hackathonId);
+  const updatedParticipations = userParticipations.filter((id: string) => id !== hackathonId);
   allParticipations[userId] = updatedParticipations;
   localStorage.setItem(USER_PARTICIPATIONS_KEY, JSON.stringify(allParticipations));
 };

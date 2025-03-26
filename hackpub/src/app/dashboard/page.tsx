@@ -4,11 +4,10 @@ import { useState, useEffect, useRef, ChangeEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Navbar } from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useAuth } from '@/context/AuthContext';
 import { getHackathons, addHackathon } from '@/utils/localStorage';
-import { Hackathon, HackathonCategory } from '@/types';
+import { Hackathon } from '@/types';
 import { toast } from 'react-toastify';
 
 export default function Dashboard() {
@@ -23,7 +22,6 @@ export default function Dashboard() {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<string>('Web Development');
   const [formLink, setFormLink] = useState('');
-  const [bannerUrl, setBannerUrl] = useState('');
   const [bannerFile, setBannerFile] = useState<File | null>(null);
   const [bannerPreview, setBannerPreview] = useState<string>('');
   
@@ -132,7 +130,6 @@ export default function Dashboard() {
     setDescription('');
     setCategory('Web Development');
     setFormLink('');
-    setBannerUrl('');
     setBannerFile(null);
     setBannerPreview('');
     
@@ -336,7 +333,7 @@ export default function Dashboard() {
           
           {hackathons.length === 0 ? (
             <div className="px-4 py-5 sm:p-6 text-center">
-              <p className="text-gray-500">You haven't created any hackathons yet.</p>
+              <p className="text-gray-500">You haven&apos;t created any hackathons yet.</p>
             </div>
           ) : (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -346,10 +343,11 @@ export default function Dashboard() {
                   className="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200"
                 >
                   <div className="relative h-48">
-                    <img
+                    <Image
                       src={hackathon.bannerUrl}
                       alt={hackathon.title}
-                      className="w-full h-full object-cover"
+                      className="object-cover"
+                      fill
                     />
                     <div className="absolute top-2 right-2">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800">

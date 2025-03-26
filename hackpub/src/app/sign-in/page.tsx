@@ -17,7 +17,7 @@ export default function SignIn() {
     setLoading(true);
 
     try {
-      await signIn(email, password);
+      await signIn(email);
       // Get the user from localStorage to check their role
       const storedUser = localStorage.getItem("user");
       if (storedUser) {

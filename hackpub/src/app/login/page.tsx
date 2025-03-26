@@ -19,7 +19,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       // For demo purposes, we'll use a test email and password
-      await signIn('test@example.com', 'password');
+      await signIn('test@example.com');
       router.push(role === 'host' ? '/dashboard' : '/hackathons');
     } catch (error) {
       console.error('Login error:', error);
